@@ -8,6 +8,10 @@ from PIL import ImageTk, Image
 from tkinter import filedialog
 from tkinter import ttk
 
+import PIL
+import cv2
+import numpy as np
+
 
 class App:
 
@@ -75,25 +79,106 @@ class App:
         blurbutton.place(x=100, y=30, width=70, height=25)
         blurbutton["command"] = self.blur_image
 
-        GButton_417 = tk.Button(root)
-        GButton_417["bg"] = "#efefef"
+        Crop = tk.Button(root)
+        Crop["bg"] = "#efefef"
         ft = tkFont.Font(family='Times', size=10)
-        GButton_417["font"] = ft
-        GButton_417["fg"] = "#000000"
-        GButton_417["justify"] = "center"
-        GButton_417["text"] = "Button"
-        GButton_417.place(x=100, y=60, width=70, height=25)
-        GButton_417["command"] = self.GButton_417_command
+        Crop["font"] = ft
+        Crop["fg"] = "#000000"
+        Crop["justify"] = "center"
+        Crop["text"] = "Crop"
+        Crop.place(x=100, y=60, width=70, height=25)
+        Crop["command"] = self.Crop_command
 
-        GButton_440 = tk.Button(root)
-        GButton_440["bg"] = "#efefef"
+        Flip = tk.Button(root)
+        Flip["bg"] = "#efefef"
         ft = tkFont.Font(family='Times', size=10)
-        GButton_440["font"] = ft
-        GButton_440["fg"] = "#000000"
-        GButton_440["justify"] = "center"
-        GButton_440["text"] = "Button"
-        GButton_440.place(x=100, y=90, width=70, height=25)
-        GButton_440["command"] = self.GButton_440_command
+        Flip["font"] = ft
+        Flip["fg"] = "#000000"
+        Flip["justify"] = "center"
+        Flip["text"] = "Flip"
+        Flip.place(x=100, y=90, width=70, height=25)
+        Flip["command"] = self.Flip_command
+        
+        Mirror = tk.Button(root)
+        Mirror["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Mirror["font"] = ft
+        Mirror["fg"] = "#000000"
+        Mirror["justify"] = "center"
+        Mirror["text"] = "Mirror"
+        Mirror.place(x=100, y=120, width=70, height=25)
+        Mirror["command"] = self.Mirror_command
+        
+        Rotate = tk.Button(root)
+        Rotate["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Rotate["font"] = ft
+        Rotate["fg"] = "#000000"
+        Rotate["justify"] = "center"
+        Rotate["text"] = "Rotate"
+        Rotate.place(x=100, y=150, width=70, height=25)
+        Rotate["command"] = self.Rotate_command
+
+        InverseColor = tk.Button(root)
+        InverseColor["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        InverseColor["font"] = ft
+        InverseColor["fg"] = "#000000"
+        InverseColor["justify"] = "center"
+        InverseColor["text"] = "Inverse Color"
+        InverseColor.place(x=200, y=30, width=70, height=25)
+        InverseColor["command"] = self.InverseColor_command
+
+        ChangeRGB = tk.Button(root)
+        ChangeRGB["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        ChangeRGB["font"] = ft
+        ChangeRGB["fg"] = "#000000"
+        ChangeRGB["justify"] = "center"
+        ChangeRGB["text"] = "ChangeRGB"
+        ChangeRGB.place(x=200, y=60, width=70, height=25)
+        ChangeRGB["command"] = self.ChangeRGB_command
+
+        Button5 = tk.Button(root)
+        Button5["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Button5["font"] = ft
+        Button5["fg"] = "#000000"
+        Button5["justify"] = "center"
+        Button5["text"] = "Flip"
+        Button5.place(x=200, y=90, width=70, height=25)
+        #Button5["command"] = self.Button5_command
+
+        Button6 = tk.Button(root)
+        Button6["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Button6["font"] = ft
+        Button6["fg"] = "#000000"
+        Button6["justify"] = "center"
+        Button6["text"] = "Flip"
+        Button6.place(x=200, y=120, width=70, height=25)
+        #Button6["command"] = self.Button6_command
+
+        Button7 = tk.Button(root)
+        Button7["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Button7["font"] = ft
+        Button7["fg"] = "#000000"
+        Button7["justify"] = "center"
+        Button7["text"] = "Flip"
+        Button7.place(x=200, y=150, width=70, height=25)
+        #Button7["command"] = self.Button7_command
+
+        Button8 = tk.Button(root)
+        Button8["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        Button8["font"] = ft
+        Button8["fg"] = "#000000"
+        Button8["justify"] = "center"
+        Button8["text"] = "Flip"
+        Button8.place(x=200, y=180, width=70, height=25)
+        #Button8["command"] = self.Button8_command
+
 
     # ************ EDIT ************
 
@@ -107,7 +192,7 @@ class App:
         imlist = im.size
 
         new_image = im.resize(
-            (int(imlist[0] / 2), int(imlist[1] / 2)) if (int(imlist[0] ) > 600 or int(imlist[1]  ) > 600) else (
+            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0] ) > 600 or int(imlist[1]  ) > 600) else (
                 imlist[0], imlist[1]))
         img_will_be_saved=new_image
         img_will_be_changed=path.name
@@ -133,7 +218,7 @@ class App:
             img_will_be_saved = im
             imlist = im.size
             new_image = im.resize(
-                (int(imlist[0] / 2), int(imlist[1] / 2)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
                     imlist[0], imlist[1]))
             img_will_be_changed = ImageTk.PhotoImage(new_image)
 
@@ -147,11 +232,242 @@ class App:
             messagebox.showerror("Error", "U cannot use this process to this image.")
 
 
-    def GButton_417_command(self):
+    def Crop_command(self):
+
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        path = img_will_be_changed
+        im = Image.open(path)
+
+        root2 = Tk()
+        root2.title("crop sizes left right uppper lower")
+        root2.geometry("400x400")
+
+
+        left = tk.Text(root2,height=1)
+        left.pack()
+          
+
+        top = tk.Text(root2,height=1)
+        top.pack()
+        
+        
+        right = tk.Text(root2,height=1)
+        right.pack()
+        
+
+        bottom = tk.Text(root2,height=1)
+        bottom.pack()
+
+     
+
+        def getTextInput():
+            global lresult
+            global rresult
+            global tresult
+            global bresult  
+            lresult=int(left.get("1.0",tk.END+"-1c"))
+            rresult=int(right.get("1.0",tk.END+"-1c"))
+            tresult=int(top.get("1.0",tk.END+"-1c"))
+            bresult=int(bottom.get("1.0",tk.END+"-1c"))
+            
+
+        l = Label(root2, text = "Type pixels for the crop. Example: 50,50,200,200")
+        l.pack()
+        b2 = Button(root2,text='finish',  command= root2.destroy)
+        b2.pack(side='bottom')       
+        b = Button(root2,text='apply',  command= getTextInput)
+        b.pack(side='bottom')
+
+
+        root2.wait_window(b)
+        im1 = im.crop((lresult,tresult,rresult,bresult))
+        
+        print("croppped")
+        img_will_be_saved = im1
+        imlist = im1.size
+        new_image = im1.resize(
+            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                imlist[0], imlist[1]))
+        img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+        lbl = Label(image=img_will_be_changed)
+        lbl.grid(column=0, row=0)
+        lbl.place(x=600, y=150, width=600, height=600)
+       
+
+
+    def Flip_command(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        try:
+            path = img_will_be_changed
+            im = Image.open(path)
+            im = im.transpose(Image.FLIP_TOP_BOTTOM)
+            img_will_be_saved = im
+            imlist = im.size
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+            lbl = Label(image=img_will_be_changed)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=600, y=150, width=600, height=600)
+            print("flipped")
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U cannot use this process to this image.")
         print("command")
 
-    def GButton_440_command(self):
+    def Mirror_command(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        try:
+            path = img_will_be_changed
+            im = Image.open(path)
+            im = im.transpose(Image.FLIP_LEFT_RIGHT)
+            img_will_be_saved = im
+            imlist = im.size
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+            lbl = Label(image=img_will_be_changed)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=600, y=150, width=600, height=600)
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U cannot use this process to this image.")
         print("command")
+
+    def Rotate_command(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        try:
+            path = img_will_be_changed
+            im = Image.open(path)
+            im = im.transpose(Image.ROTATE_90)
+            img_will_be_saved = im
+            imlist = im.size
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+            lbl = Label(image=img_will_be_changed)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=600, y=150, width=600, height=600)
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U cannot use this process to this image.")
+        print("command")
+
+    def InverseColor_command(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        try:
+            path = img_will_be_changed
+            im = Image.open(path)
+            im =  PIL.ImageOps.invert(im)
+            img_will_be_saved = im
+            imlist = im.size
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+            lbl = Label(image=img_will_be_changed)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=600, y=150, width=600, height=600)
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U cannot use this process to this image.")
+        print("command")
+
+    def ChangeRGB_command(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        
+        path = img_will_be_changed
+        im = Image.open(path)
+        
+        arr = np.array(im)
+        asize = arr.shape
+
+        root3 = Tk()
+        root3.title("crop sizes left right uppper lower")
+        root3.geometry("400x400")
+
+        name_var=tk.IntVar()
+        red = tk.Text(root3,height=1)
+        red.pack()
+        
+        
+        name_var2=tk.IntVar() 
+        green = tk.Text(root3,height=1)
+        green.pack()
+        
+
+        name_var3=tk.IntVar()         
+        blue = tk.Text(root3,height=1)
+        blue.pack()
+
+
+        def getTextInput():
+            global redresult
+            global greenresult
+            global blueresult
+            
+            redresult=int(red.get("1.0",tk.END+"-1c"))
+            greenresult=int(green.get("1.0",tk.END+"-1c"))
+            blueresult=int(blue.get("1.0",tk.END+"-1c"))
+            
+        l = Label(root3, text = "Type red green blue ")
+        l.pack()
+        b2 = Button(root3,text='finish',  command= root3.destroy)
+        b2.pack(side='bottom')       
+        b = Button(root3,text='apply',  command= getTextInput)
+        b.pack(side='bottom')
+
+
+        root3.wait_window(b)
+
+        for j in range (asize[0]-10):
+            for i in range(asize[1]-10):
+                    [r,g,b]=im.getpixel((i, j))
+                    r = redresult
+                    g = greenresult
+                    b = blueresult
+                    value = (r,g,b)
+                    im.putpixel((i,j),value)
+
+
+
+
+
+        img_will_be_saved = im
+        imlist = im.size
+        new_image = im.resize(
+            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                imlist[0], imlist[1]))
+        img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+        lbl = Label(image=img_will_be_changed)
+        lbl.grid(column=0, row=0)
+        lbl.place(x=600, y=150, width=600, height=600)
+           
 
 
 if __name__ == "__main__":
