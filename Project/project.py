@@ -98,7 +98,7 @@ class App:
         Flip["text"] = "Flip"
         Flip.place(x=100, y=90, width=70, height=25)
         Flip["command"] = self.Flip_command
-        
+
         Mirror = tk.Button(root)
         Mirror["bg"] = "#efefef"
         ft = tkFont.Font(family='Times', size=10)
@@ -108,7 +108,7 @@ class App:
         Mirror["text"] = "Mirror"
         Mirror.place(x=100, y=120, width=70, height=25)
         Mirror["command"] = self.Mirror_command
-        
+
         Rotate = tk.Button(root)
         Rotate["bg"] = "#efefef"
         ft = tkFont.Font(family='Times', size=10)
@@ -147,7 +147,7 @@ class App:
         Button5["justify"] = "center"
         Button5["text"] = "Flip"
         Button5.place(x=200, y=90, width=70, height=25)
-        #Button5["command"] = self.Button5_command
+        # Button5["command"] = self.Button5_command
 
         Button6 = tk.Button(root)
         Button6["bg"] = "#efefef"
@@ -157,7 +157,7 @@ class App:
         Button6["justify"] = "center"
         Button6["text"] = "Flip"
         Button6.place(x=200, y=120, width=70, height=25)
-        #Button6["command"] = self.Button6_command
+        # Button6["command"] = self.Button6_command
 
         Button7 = tk.Button(root)
         Button7["bg"] = "#efefef"
@@ -167,7 +167,7 @@ class App:
         Button7["justify"] = "center"
         Button7["text"] = "Flip"
         Button7.place(x=200, y=150, width=70, height=25)
-        #Button7["command"] = self.Button7_command
+        # Button7["command"] = self.Button7_command
 
         Button8 = tk.Button(root)
         Button8["bg"] = "#efefef"
@@ -177,8 +177,7 @@ class App:
         Button8["justify"] = "center"
         Button8["text"] = "Flip"
         Button8.place(x=200, y=180, width=70, height=25)
-        #Button8["command"] = self.Button8_command
-
+        # Button8["command"] = self.Button8_command
 
     # ************ EDIT ************
 
@@ -192,28 +191,25 @@ class App:
         imlist = im.size
 
         new_image = im.resize(
-            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0] ) > 600 or int(imlist[1]  ) > 600) else (
+            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
                 imlist[0], imlist[1]))
-        img_will_be_saved=new_image
-        img_will_be_changed=path.name
+        img_will_be_saved = new_image
+        img_will_be_changed = path.name
         input = ImageTk.PhotoImage(new_image)
         lbl = Label(image=input)
         lbl.grid(column=0, row=0)
         lbl.place(x=0, y=260)
 
-
-
     def saveFile_command(self):
         img_will_be_saved.save("photsaved.jpg")
-
 
     def blur_image(self):
         global input
         global img_will_be_saved
         global img_will_be_changed
         try:
-            path = img_will_be_changed
-            im = Image.open(path)
+
+            im = img_will_be_saved
             im = im.filter(ImageFilter.BLUR)
             img_will_be_saved = im
             imlist = im.size
@@ -231,59 +227,50 @@ class App:
 
             messagebox.showerror("Error", "U cannot use this process to this image.")
 
-
     def Crop_command(self):
 
         global input
         global img_will_be_saved
         global img_will_be_changed
-        path = img_will_be_changed
-        im = Image.open(path)
+
+        im = img_will_be_saved
 
         root2 = Tk()
         root2.title("crop sizes left right uppper lower")
         root2.geometry("400x400")
 
-
-        left = tk.Text(root2,height=1)
+        left = tk.Text(root2, height=1)
         left.pack()
-          
 
-        top = tk.Text(root2,height=1)
+        top = tk.Text(root2, height=1)
         top.pack()
-        
-        
-        right = tk.Text(root2,height=1)
+
+        right = tk.Text(root2, height=1)
         right.pack()
-        
 
-        bottom = tk.Text(root2,height=1)
+        bottom = tk.Text(root2, height=1)
         bottom.pack()
-
-     
 
         def getTextInput():
             global lresult
             global rresult
             global tresult
-            global bresult  
-            lresult=int(left.get("1.0",tk.END+"-1c"))
-            rresult=int(right.get("1.0",tk.END+"-1c"))
-            tresult=int(top.get("1.0",tk.END+"-1c"))
-            bresult=int(bottom.get("1.0",tk.END+"-1c"))
-            
+            global bresult
+            lresult = int(left.get("1.0", tk.END + "-1c"))
+            rresult = int(right.get("1.0", tk.END + "-1c"))
+            tresult = int(top.get("1.0", tk.END + "-1c"))
+            bresult = int(bottom.get("1.0", tk.END + "-1c"))
 
-        l = Label(root2, text = "Type pixels for the crop. Example: 50,50,200,200")
+        l = Label(root2, text="Type pixels for the crop. Example: 50,50,200,200")
         l.pack()
-        b2 = Button(root2,text='finish',  command= root2.destroy)
-        b2.pack(side='bottom')       
-        b = Button(root2,text='apply',  command= getTextInput)
+        b2 = Button(root2, text='finish', command=root2.destroy)
+        b2.pack(side='bottom')
+        b = Button(root2, text='apply', command=getTextInput)
         b.pack(side='bottom')
 
-
         root2.wait_window(b)
-        im1 = im.crop((lresult,tresult,rresult,bresult))
-        
+        im1 = im.crop((lresult, tresult, rresult, bresult))
+
         print("croppped")
         img_will_be_saved = im1
         imlist = im1.size
@@ -295,16 +282,14 @@ class App:
         lbl = Label(image=img_will_be_changed)
         lbl.grid(column=0, row=0)
         lbl.place(x=600, y=150, width=600, height=600)
-       
-
 
     def Flip_command(self):
         global input
         global img_will_be_saved
         global img_will_be_changed
         try:
-            path = img_will_be_changed
-            im = Image.open(path)
+
+            im = img_will_be_saved
             im = im.transpose(Image.FLIP_TOP_BOTTOM)
             img_will_be_saved = im
             imlist = im.size
@@ -328,8 +313,8 @@ class App:
         global img_will_be_saved
         global img_will_be_changed
         try:
-            path = img_will_be_changed
-            im = Image.open(path)
+
+            im = img_will_be_saved
             im = im.transpose(Image.FLIP_LEFT_RIGHT)
             img_will_be_saved = im
             imlist = im.size
@@ -352,8 +337,8 @@ class App:
         global img_will_be_saved
         global img_will_be_changed
         try:
-            path = img_will_be_changed
-            im = Image.open(path)
+
+            im = img_will_be_saved
             im = im.transpose(Image.ROTATE_90)
             img_will_be_saved = im
             imlist = im.size
@@ -376,9 +361,9 @@ class App:
         global img_will_be_saved
         global img_will_be_changed
         try:
-            path = img_will_be_changed
-            im = Image.open(path)
-            im =  PIL.ImageOps.invert(im)
+
+            im = img_will_be_saved
+            im = PIL.ImageOps.invert(im)
             img_will_be_saved = im
             imlist = im.size
             new_image = im.resize(
@@ -399,10 +384,10 @@ class App:
         global input
         global img_will_be_saved
         global img_will_be_changed
-        
-        path = img_will_be_changed
-        im = Image.open(path)
-        
+
+
+        im = img_will_be_saved
+
         arr = np.array(im)
         asize = arr.shape
 
@@ -410,52 +395,44 @@ class App:
         root3.title("crop sizes left right uppper lower")
         root3.geometry("400x400")
 
-        name_var=tk.IntVar()
-        red = tk.Text(root3,height=1)
+        name_var = tk.IntVar()
+        red = tk.Text(root3, height=1)
         red.pack()
-        
-        
-        name_var2=tk.IntVar() 
-        green = tk.Text(root3,height=1)
+
+        name_var2 = tk.IntVar()
+        green = tk.Text(root3, height=1)
         green.pack()
-        
 
-        name_var3=tk.IntVar()         
-        blue = tk.Text(root3,height=1)
+        name_var3 = tk.IntVar()
+        blue = tk.Text(root3, height=1)
         blue.pack()
-
 
         def getTextInput():
             global redresult
             global greenresult
             global blueresult
-            
-            redresult=int(red.get("1.0",tk.END+"-1c"))
-            greenresult=int(green.get("1.0",tk.END+"-1c"))
-            blueresult=int(blue.get("1.0",tk.END+"-1c"))
-            
-        l = Label(root3, text = "Type red green blue ")
-        l.pack()
-        b2 = Button(root3,text='finish',  command= root3.destroy)
-        b2.pack(side='bottom')       
-        b = Button(root3,text='apply',  command= getTextInput)
-        b.pack(side='bottom')
 
+            redresult = int(red.get("1.0", tk.END + "-1c"))
+            greenresult = int(green.get("1.0", tk.END + "-1c"))
+            blueresult = int(blue.get("1.0", tk.END + "-1c"))
+
+        l = Label(root3, text="Type red green blue ")
+        l.pack()
+        b2 = Button(root3, text='finish', command=root3.destroy)
+        b2.pack(side='bottom')
+        b = Button(root3, text='apply', command=getTextInput)
+        b.pack(side='bottom')
 
         root3.wait_window(b)
 
-        for j in range (asize[0]-10):
-            for i in range(asize[1]-10):
-                    [r,g,b]=im.getpixel((i, j))
-                    r = redresult
-                    g = greenresult
-                    b = blueresult
-                    value = (r,g,b)
-                    im.putpixel((i,j),value)
-
-
-
-
+        for j in range(asize[0] - 10):
+            for i in range(asize[1] - 10):
+                [r, g, b] = im.getpixel((i, j))
+                r = redresult
+                g = greenresult
+                b = blueresult
+                value = (r, g, b)
+                im.putpixel((i, j), value)
 
         img_will_be_saved = im
         imlist = im.size
@@ -467,7 +444,6 @@ class App:
         lbl = Label(image=img_will_be_changed)
         lbl.grid(column=0, row=0)
         lbl.place(x=600, y=150, width=600, height=600)
-           
 
 
 if __name__ == "__main__":
