@@ -5,7 +5,6 @@ import tkinter.font as tkFont
 from tkinter.filedialog import askopenfile
 from PIL import ImageGrab, ImageFilter
 from PIL import ImageTk, Image, ImageEnhance
-from skimage.util import random_noise
 from tkinter import filedialog
 from tkinter import ttk
 
@@ -504,8 +503,8 @@ class App:
 
         root3.wait_window(b)
 
-        for j in range(asize[0] - 10):
-            for i in range(asize[1] - 10):
+        for j in range(asize[0] - 0):
+            for i in range(asize[1] - 0):
                 [r, g, b] = im.getpixel((i, j))
                 r = redresult
                 g = greenresult
@@ -535,13 +534,12 @@ class App:
         root3.title("brightness")
         root3.geometry("400x400")
 
-        name_var = tk.StringVar()
-        red = tk.Text(root3, height=1)
-        red.pack()
+        bright = tk.Text(root3, height=1)
+        bright.pack()
 
         def getTextInput():
-            global redresult
-            redresult = float(red.get("1.0", tk.END + "-1c"))
+            global brightresult
+            brightresult = float(bright.get("1.0", tk.END + "-1c"))
 
         l = Label(root3, text="Type a value to adjust brightness of image.")
         l.pack()
@@ -552,7 +550,7 @@ class App:
 
         root3.wait_window(b)
 
-        factor = redresult
+        factor = brightresult
         img_brightness_obj = ImageEnhance.Brightness(im)
         im = img_brightness_obj.enhance(factor)
 
@@ -578,13 +576,13 @@ class App:
         root3.title("contrast")
         root3.geometry("400x400")
 
-        name_var = tk.StringVar()
-        red = tk.Text(root3, height=1)
-        red.pack()
+        
+        cont = tk.Text(root3, height=1)
+        cont.pack()
 
         def getTextInput():
-            global redresult
-            redresult = float(red.get("1.0", tk.END + "-1c"))
+            global contresult
+            contresult = float(cont.get("1.0", tk.END + "-1c"))
 
         l = Label(root3, text="Type a value to adjust contrast of image.")
         l.pack()
@@ -595,7 +593,7 @@ class App:
 
         root3.wait_window(b)
 
-        factor = redresult
+        factor = contresult
         img_brightness_obj = ImageEnhance.Contrast(im)
         im = img_brightness_obj.enhance(factor)
 
@@ -623,13 +621,12 @@ class App:
         root3.title("contrast")
         root3.geometry("400x400")
 
-        name_var = tk.StringVar()
-        red = tk.Text(root3, height=1)
-        red.pack()
+        sat = tk.Text(root3, height=1)
+        sat.pack()
 
         def getTextInput():
-            global redresult
-            redresult = float(red.get("1.0", tk.END + "-1c"))
+            global satresult
+            satresult = float(sat.get("1.0", tk.END + "-1c"))
 
         l = Label(root3, text="Type a value to adjust contrast of image.")
         l.pack()
@@ -640,12 +637,8 @@ class App:
 
         root3.wait_window(b)
 
-        factor = redresult
+        factor = satresult
         im=img_enhanced.enhance(factor)
-
-
-
-
 
         img_will_be_saved = im
         imlist = im.size
