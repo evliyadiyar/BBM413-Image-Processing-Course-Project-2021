@@ -16,7 +16,7 @@ import numpy as np
 def noise(img):
     # Generate Gaussian noise
     gauss = np.random.normal(0, 1, img.size)
-    if(len(img.shape)>2):
+    if (len(img.shape) > 2):
         gauss = gauss.reshape(img.shape[0], img.shape[1], img.shape[2]).astype('uint8')
     else:
         gauss = gauss.reshape(img.shape[0], img.shape[1]).astype('uint8')
@@ -167,9 +167,10 @@ class App:
         Button6["font"] = ft
         Button6["fg"] = "#000000"
         Button6["justify"] = "center"
-        Button6["text"] = "adjust_brightness"
+        Button6["text"] = "adjust brightness"
         Button6.place(x=200, y=120, width=70, height=25)
         Button6["command"] = self.adjust_brightness
+
 
         Button7 = tk.Button(root)
         Button7["bg"] = "#efefef"
@@ -211,6 +212,16 @@ class App:
         Edges.place(x=300, y=30, width=70, height=25)
         Edges["command"] = self.detect_Edges
 
+        GrayScale = tk.Button(root)
+        GrayScale["bg"] = "#efefef"
+        ft = tkFont.Font(family='Times', size=10)
+        GrayScale["font"] = ft
+        GrayScale["fg"] = "#000000"
+        GrayScale["justify"] = "center"
+        GrayScale["text"] = "Grayscale"
+        GrayScale.place(x=300, y=60, width=70, height=25)
+        GrayScale["command"] = self.grayscale
+
     # ************ EDIT ************
 
     def loadFile_command(self):
@@ -218,22 +229,32 @@ class App:
         global img_will_be_saved
         global img_will_be_changed
 
-        path = askopenfile(filetypes=[("Image File", "*.jpg"), ("Image File", "*.png")])
-        im = Image.open(path.name)
-        imlist = im.size
+        try:
+            path = askopenfile(filetypes=[("Image File", "*.jpg"), ("Image File", "*.png")])
+            im = Image.open(path.name)
+            imlist = im.size
 
-        new_image = im.resize(
-            (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
-                imlist[0], imlist[1]))
-        img_will_be_saved = new_image
-        img_will_be_changed = path.name
-        input = ImageTk.PhotoImage(new_image)
-        lbl = Label(image=input)
-        lbl.grid(column=0, row=0)
-        lbl.place(x=0, y=260)
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_saved = new_image
+            img_will_be_changed = path.name
+            input = ImageTk.PhotoImage(new_image)
+            lbl = Label(image=input)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=0, y=260)
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U have to select an image!")
 
     def saveFile_command(self):
-        img_will_be_saved.save("photsaved.jpg")
+        try:
+            img_will_be_saved.save("photosaved.jpg")
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U didn't select an image, so you cannot save it!")
 
     def blur_image(self):
         global input
@@ -253,12 +274,37 @@ class App:
             lbl = Label(image=img_will_be_changed)
             lbl.grid(column=0, row=0)
             lbl.place(x=600, y=150, width=600, height=600)
-            print("blured")
+
         except:
             from tkinter import messagebox
 
             messagebox.showerror("Error", "U cannot use this process to this image.")
 
+    def grayscale(self):
+        global input
+        global img_will_be_saved
+        global img_will_be_changed
+        try:
+
+            im = img_will_be_saved
+            img_np_array=np.array(im)
+            img_np_array=cv2.cvtColor(img_np_array, cv2.COLOR_BGR2GRAY)
+            im= Image.fromarray(img_np_array)
+            img_will_be_saved = im
+            imlist = im.size
+            new_image = im.resize(
+                (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 600 or int(imlist[1]) > 600) else (
+                    imlist[0], imlist[1]))
+            img_will_be_changed = ImageTk.PhotoImage(new_image)
+
+            lbl = Label(image=img_will_be_changed)
+            lbl.grid(column=0, row=0)
+            lbl.place(x=600, y=150, width=600, height=600)
+
+        except:
+            from tkinter import messagebox
+
+            messagebox.showerror("Error", "U cannot use this process to this image.")
     def deblur_image(self):
         global input
         global img_will_be_saved
@@ -328,7 +374,7 @@ class App:
         root2.wait_window(b)
         im1 = im.crop((lresult, tresult, rresult, bresult))
 
-        print("croppped")
+
         img_will_be_saved = im1
         imlist = im1.size
         new_image = im1.resize(
@@ -358,12 +404,12 @@ class App:
             lbl = Label(image=img_will_be_changed)
             lbl.grid(column=0, row=0)
             lbl.place(x=600, y=150, width=600, height=600)
-            print("flipped")
+
         except:
             from tkinter import messagebox
 
             messagebox.showerror("Error", "U cannot use this process to this image.")
-        print("command")
+
 
     def Mirror_command(self):
         global input
@@ -387,7 +433,7 @@ class App:
             from tkinter import messagebox
 
             messagebox.showerror("Error", "U cannot use this process to this image.")
-        print("command")
+
 
     def Rotate_command(self):
         global input
@@ -411,13 +457,12 @@ class App:
             from tkinter import messagebox
 
             messagebox.showerror("Error", "U cannot use this process to this image.")
-        print("command")
+
 
     def InverseColor_command(self):
         global input
         global img_will_be_saved
         global img_will_be_changed
-
 
         im = img_will_be_saved
         im = PIL.ImageOps.invert(im)
@@ -433,18 +478,17 @@ class App:
         lbl.place(x=600, y=150, width=600, height=600)
 
 
-        print("command")
+
     def detect_Edges(self):
         global input
         global img_will_be_saved
         global img_will_be_changed
 
-
         im = img_will_be_saved
-        im_array=np.array(im)
+        im_array = np.array(im)
         gray = cv2.cvtColor(im_array, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, threshold1=30, threshold2=100)
-        im=Image.fromarray(edges)
+        im = Image.fromarray(edges)
 
         img_will_be_saved = im
         imlist = im.size
@@ -457,7 +501,7 @@ class App:
         lbl.grid(column=0, row=0)
         lbl.place(x=600, y=150, width=600, height=600)
 
-        print("command")
+
 
     def ChangeRGB_command(self):
         global input
@@ -576,7 +620,6 @@ class App:
         root3.title("contrast")
         root3.geometry("400x400")
 
-        
         cont = tk.Text(root3, height=1)
         cont.pack()
 
@@ -599,7 +642,7 @@ class App:
 
         img_will_be_saved = im
         imlist = im.size
-        print(im.size)
+
         new_image = im.resize(
             (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 650 or int(imlist[1]) > 650) else (
                 imlist[0], imlist[1]))
@@ -616,9 +659,9 @@ class App:
 
         im = img_will_be_saved
 
-        img_enhanced=ImageEnhance.Color(im)
+        img_enhanced = ImageEnhance.Color(im)
         root3 = Tk()
-        root3.title("contrast")
+        root3.title("saturation")
         root3.geometry("400x400")
 
         sat = tk.Text(root3, height=1)
@@ -628,7 +671,7 @@ class App:
             global satresult
             satresult = float(sat.get("1.0", tk.END + "-1c"))
 
-        l = Label(root3, text="Type a value to adjust contrast of image.")
+        l = Label(root3, text="Type a value to adjust saturation of image.")
         l.pack()
         b2 = Button(root3, text='finish', command=root3.destroy)
         b2.pack(side='bottom')
@@ -638,11 +681,11 @@ class App:
         root3.wait_window(b)
 
         factor = satresult
-        im=img_enhanced.enhance(factor)
+        im = img_enhanced.enhance(factor)
 
         img_will_be_saved = im
         imlist = im.size
-        print(im.size)
+
         new_image = im.resize(
             (int(imlist[0] / 3), int(imlist[1] / 3)) if (int(imlist[0]) > 650 or int(imlist[1]) > 650) else (
                 imlist[0], imlist[1]))
